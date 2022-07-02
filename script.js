@@ -2,21 +2,23 @@ function GetInfo() {
 
     var newName = document.getElementById("cityInput");
     var cityName = document.getElementById("cityName");
+	const local_time = Date.now();
     cityName.innerHTML = "--"+newName.value+"--";
 
 fetch('https://api.openweathermap.org/data/2.5/forecast?q='+newName.value+'&appid=cb9337f55d6e5db813bcbc3dbe9ad5c8')
 .then(response => response.json())
 .then(data => {
+	
+	//get time
+	const time = new Date(local_time + (data.city.timezone*1000));
+	cityTime.innerHTML = "--" + time.getHours() + ":" + time.getMinutes() + "--" ;
 
-    //Getting the min and max values for each day
-    for(i = 0; i<7; i++){
-        document.getElementById("day" + (i+1) + "Min").innerHTML = "Min: " + Number(data.list[i].main.temp_min - 273.15).toFixed(1)+ "°";
-        //Number(1.3450001).toFixed(2); // 1.35
-    }
+    //get temp values for each day
 
-    for(i = 0; i<7; i++){
-        document.getElementById("day" + (i+1) + "Max").innerHTML = "Max: " + Number(data.list[i].main.temp_max - 273.15).toFixed(2) + "°";
+	for(i = 0; i<7; i++){
+        document.getElementById("day" + (i+1) + "Temp").innerHTML = "Temp: " + Number(data.list[i].main.temp - 273.15).toFixed(1) + "°";
     }
+	
     //------------------------------------------------------------
 
     //Getting Weather Icons
